@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DTF Image Prep Studio</title>
+  <link href="https://cdn.tailwindcss.com"  rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"  rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="dtf-gradient text-white p-6 shadow-lg">
+    <div class="container mx-auto">
+      <h1 class="text-4xl font-bold mb-2 flex items-center">
+        <i class="fas fa-palette mr-3"></i>
+        DTF Image Prep Studio
+      </h1>
+      <p class="text-lg opacity-90">Prepara tus imágenes para estampado Direct to Film profesional</p>
+    </div>
+  </header>
+  <main class="container mx-auto p-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Panel de Control -->
+      <section class="lg:col-span-1 space-y-6">
+        <!-- Carga de Imagen -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-upload mr-2 text-blue-500"></i>
+            Cargar Imagen
+          </h3>
+          <div id="dropZone" role="button" aria-label="Zona para soltar imagen" tabindex="0" class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
+            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600 mb-2">Arrastra tu imagen aquí o haz clic</p>
+            <input type="file" id="imageInput" accept="image/*" class="hidden">
+            <button id="selectFileBtn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              Seleccionar Archivo
+            </button>
+          </div>
+        </div>
+        <!-- Herramientas DTF -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-tools mr-2 text-green-500"></i>
+            Ajustes DTF
+          </h3>
+          <!-- Brillo -->
+          <div class="mb-4">
+            <label for="brightnessSlider" class="block text-sm font-medium mb-2">Brillo</label>
+            <input type="range" id="brightnessSlider" min="-50" max="50" value="0" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span id="brightnessValue" class="text-sm text-gray-600">0</span>
+          </div>
+          <!-- Contraste -->
+          <div class="mb-4">
+            <label for="contrastSlider" class="block text-sm font-medium mb-2">Contraste</label>
+            <input type="range" id="contrastSlider" min="0" max="200" value="100" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span id="contrastValue" class="text-sm text-gray-600">100%</span>
+          </div>
+          <!-- Saturación -->
+          <div class="mb-4">
+            <label for="saturationSlider" class="block text-sm font-medium mb-2">Saturación</label>
+            <input type="range" id="saturationSlider" min="0" max="200" value="100" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span id="saturationValue" class="text-sm text-gray-600">100%</span>
+          </div>
+          <!-- Nitidez -->
+          <div class="mb-4">
+            <label for="sharpnessSlider" class="block text-sm font-medium mb-2">Nitidez</label>
+            <input type="range" id="sharpnessSlider" min="0" max="100" value="0" class="w-full h-2 bg-gray-200 rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <span id="sharpnessValue" class="text-sm text-gray-600">0</span>
+          </div>
+        </div>
+        <!-- Dimensiones y Resolución -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-expand-arrows-alt mr-2 text-purple-500"></i>
+            Dimensiones
+          </h3>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="widthInput" class="block text-sm font-medium mb-1">Ancho (cm)</label>
+              <input type="number" id="widthInput" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value="20" min="1">
+            </div>
+            <div>
+              <label for="heightInput" class="block text-sm font-medium mb-1">Alto (cm)</label>
+              <input type="number" id="heightInput" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value="20" min="1">
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="dpiSelect" class="block text-sm font-medium mb-1">Resolución (DPI)</label>
+            <select id="dpiSelect" class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="150">150 DPI (Draft)</option>
+              <option value="300" selected>300 DPI (Estándar DTF)</option>
+              <option value="600">600 DPI (Alta calidad)</option>
+              <option value="1200">1200 DPI (Máxima calidad)</option>
+            </select>
+          </div>
+          <label class="flex items-center mb-4">
+            <input type="checkbox" id="maintainRatio" checked class="mr-2 focus:ring-2 focus:ring-blue-500">
+            <span class="text-sm">Mantener proporción</span>
+          </label>
+        </div>
+        <!-- Filtros DTF Específicos -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-magic mr-2 text-red-500"></i>
+            Filtros DTF
+          </h3>
+          <div class="space-y-3">
+            <button id="whiteBaseBtn" class="tool-button w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <i class="fas fa-layer-group mr-2"></i> Optimizar Base Blanca
+            </button>
+            <button id="colorBoostBtn" class="tool-button w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+              <i class="fas fa-tint mr-2"></i> Intensificar Colores
+            </button>
+            <button id="edgeEnhanceBtn" class="tool-button w-full bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <i class="fas fa-border-style mr-2"></i> Realzar Bordes
+            </button>
+            <button id="cmykSimBtn" class="tool-button w-full bg-yellow-500 text-white p-3 rounded-lg hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <i class="fas fa-palette mr-2"></i> Simulación CMYK
+            </button>
+          </div>
+        </div>
+        <!-- Botones de Acción -->
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-cog mr-2 text-gray-500"></i>
+            Acciones
+          </h3>
+          <div class="space-y-3">
+            <button id="resetBtn" class="w-full bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">
+              <i class="fas fa-undo mr-2"></i> Resetear Todo
+            </button>
+            <button id="previewBtn" class="w-full bg-indigo-500 text-white p-3 rounded-lg hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <i class="fas fa-eye mr-2"></i> Vista Previa DTF
+            </button>
+            <button id="downloadBtn" class="w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+              <i class="fas fa-download mr-2"></i> Descargar Imagen
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Canvas Principal -->
+      <section class="lg:col-span-2">
+        <div class="bg-white rounded-2xl p-6 shadow-lg h-full">
+          <h3 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+            <i class="fas fa-image mr-2 text-blue-500"></i> Vista Previa
+            <span id="imageInfo" class="ml-auto text-sm text-gray-500"></span>
+          </h3>
+          <div id="canvasContainer" class="canvas-container rounded-xl p-4 h-96 flex items-center justify-center border-2 border-gray-200">
+            <canvas id="mainCanvas" class="max-w-full max-h-full shadow-lg rounded-lg hidden"></canvas>
+            <div id="placeholderText" class="text-center text-gray-400">
+              <i class="fas fa-image text-6xl mb-4"></i>
+              <p class="text-lg">Carga una imagen para comenzar</p>
+              <p class="text-sm">Formatos soportados: JPG, PNG, GIF, WebP</p>
+            </div>
+          </div>
+          <!-- Panel de Información -->
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="preview-card rounded-lg p-4 text-center">
+              <h4 class="font-semibold text-gray-700">Tamaño Original</h4>
+              <p id="originalSize" class="text-sm text-gray-600">-</p>
+            </div>
+            <div class="preview-card rounded-lg p-4 text-center">
+              <h4 class="font-semibold text-gray-700">Tamaño DTF</h4>
+              <p id="dtfSize" class="text-sm text-gray-600">-</p>
+            </div>
+            <div class="preview-card rounded-lg p-4 text-center">
+              <h4 class="font-semibold text-gray-700">Calidad</h4>
+              <p id="qualityInfo" class="text-sm text-gray-600">-</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <!-- Modal de Vista Previa DTF -->
+  <div id="previewModal" role="dialog" aria-modal="true" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-6 max-w-4xl max-h-[90vh] overflow-auto">
+      <header class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-gray-800">Vista Previa DTF</h3>
+        <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl focus:outline-none focus:ring-2 focus:ring-gray-500">
+          <i class="fas fa-times"></i>
+        </button>
+      </header>
+      <img id="previewImage" alt="Vista previa DTF" class="max-w-full mx-auto" />
+    </div>
+  </div>
+  <script src="dtf-image-prep.js"></script>
+</body>
+</html>
